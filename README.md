@@ -17,6 +17,7 @@
    - [Simulación de Monte Carlo](#7-simulación-de-monte-carlo)
 8. [Consejos para el Uso Efectivo de OpenMP](#consejos-para-el-uso-efectivo-de-openmp)
 9. [Recursos Adicionales](#recursos-adicionales)
+10. [Instalación de OpenMP](#Instalación-de-OpenMP)
 
 
 ## Introducción a OpenMP
@@ -34,7 +35,7 @@ OpenMP utiliza el modelo de ejecución fork-join, donde un hilo principal (maste
 ## Directivas Principales de OpenMP
 
 OpenMP se basa en directivas de compilador para especificar comportamiento paralelo. Las directivas principales son:
-
+## Instalación de OpenMP
 1. `#pragma omp parallel`: Crea un equipo de hilos.
 2. `#pragma omp for`: Distribuye iteraciones de un bucle entre los hilos existentes.
 3. `#pragma omp parallel for`: Combina la creación de hilos y la distribución de bucles.
@@ -503,7 +504,7 @@ fin función
 
 8. **Escalabilidad:** Diseñe sus algoritmos paralelos pensando en la escalabilidad, considerando cómo se comportarán con un número creciente de núcleos.
 
-9. **Uso de herramientas de perfilado:** Utilice herramientas de perfilado específicas para OpenMP para identificar cuellos de botella y oportunidades de optimización.
+9. **Uso de herramientas de perfilado:** ## Instalación de OpenMPUtilice herramientas de perfilado específicas para OpenMP para identificar cuellos de botella y oportunidades de optimización.
 
 10. **Familiarización con la arquitectura:** Conozca la arquitectura de su sistema (número de núcleos, topología de caché, etc.) para optimizar el rendimiento.
 
@@ -515,4 +516,88 @@ fin función
 - [Intel OpenMP Runtime Library](https://www.openmprtl.org/): Documentación y recursos de la implementación de OpenMP de Intel.
 - [GCC OpenMP Manual](https://gcc.gnu.org/onlinedocs/libgomp/): Manual de la implementación de OpenMP en GCC.
 - [OpenMP in Visual C++](https://docs.microsoft.com/en-us/cpp/parallel/openmp/openmp-in-visual-cpp): Guía de uso de OpenMP en Visual Studio.
+
+
+## Instalación de OpenMP
+
+A continuación, se proporcionan instrucciones para instalar OpenMP en diferentes sistemas operativos:
+
+### Ubuntu y Kali Linux
+
+En Ubuntu y Kali Linux, OpenMP generalmente ya está incluido con el compilador GCC. Sin embargo, puede asegurarse de tener todo lo necesario instalando los siguientes paquetes:
+
+```bash
+sudo apt update
+sudo apt install gcc g++ libomp-dev
+```
+
+### Fedora
+
+En Fedora, OpenMP también viene incluido con GCC. Para asegurarse de tener todo lo necesario:
+
+```bash
+sudo dnf update
+sudo dnf install gcc gcc-c++ libgomp
+```
+
+### Windows Subsystem for Linux (WSL)
+
+Si está utilizando WSL con Ubuntu, siga las mismas instrucciones que para Ubuntu:
+
+```bash
+sudo apt update
+sudo apt install gcc g++ libomp-dev
+```
+
+### macOS
+
+En macOS, puede usar Homebrew para instalar GCC con soporte para OpenMP:
+
+1. Primero, instale Homebrew si aún no lo tiene:
+
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+2. Luego, instale GCC:
+
+```bash
+brew install gcc
+```
+
+3. Para usar GCC en lugar del compilador predeterminado de Apple, use `gcc-11` y `g++-11` (o la versión que haya instalado) en lugar de `gcc` y `g++`.
+
+### Verificación de la Instalación
+
+Para verificar que OpenMP está correctamente instalado y funcionando, puede crear un pequeño programa de prueba:
+
+1. Cree un archivo llamado `test_openmp.cpp` con el siguiente contenido:
+
+```cpp
+#include <iostream>
+#include <omp.h>
+
+int main() {
+    #pragma omp parallel
+    {
+        std::cout << "Hola desde el hilo " << omp_get_thread_num() 
+                  << " de " << omp_get_num_threads() << std::endl;
+    }
+    return 0;
+}
+```
+
+2. Compile el programa:
+
+```bash
+g++ -fopenmp test_openmp.cpp -o test_openmp
+```
+
+3. Ejecute el programa:
+
+```bash
+./test_openmp
+```
+
+Si ve múltiples líneas de salida, una para cada hilo, OpenMP está funcionando correctamente.
 
