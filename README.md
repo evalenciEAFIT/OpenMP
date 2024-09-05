@@ -17,7 +17,7 @@
    - [Simulación de Monte Carlo](#7-simulación-de-monte-carlo)
 8. [Consejos para el Uso Efectivo de OpenMP](#consejos-para-el-uso-efectivo-de-openmp)
 9. [Recursos Adicionales](#recursos-adicionales)
-10. [Instalación de OpenMP](#Instalación-de-OpenMP)
+10. [Instalación de OpenMP](#instalación-de-openmp-1)
 
 
 ## Introducción a OpenMP
