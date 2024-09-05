@@ -48,6 +48,7 @@ public:
         for (size_t i = 0; i < tamano; ++i) {
             resultadoSecuencial[i] = vectorA[i] + vectorB[i];
         }
+        //std::cout << "suma secuencial = " << resultadoSecuencial << " | " << resultado << " = suma paralela" << std::endl;
         return resultadoSecuencial == resultado;
     }
 

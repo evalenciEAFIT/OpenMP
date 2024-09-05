@@ -14,13 +14,16 @@ private:
     void inicializarArray() {
         std::random_device rd;
         std::mt19937 gen(rd());
-        std::uniform_int_distribution<> dis(1, 1000000);
+        std::uniform_int_distribution<> dis(1, 100000000);
 
         for (auto& elemento : array) {
             elemento = dis(gen);
         }
         // Asegurarse de que el objetivo esté en el array
-        objetivo = array[tamano / 2];
+        //size_t indice_objetivo = tamano / 2;
+        //objetivo = array[indice_objetivo];
+        objetivo = dis(gen);
+        std::cout << "Elemento a buscar: " << objetivo << std::endl;
     }
 
 public:
@@ -29,36 +32,33 @@ public:
         inicializarArray();
     }
 
-    // Realiza la búsqueda de forma secuencial
+    // Método de búsqueda secuencial tradicional
     int buscarSecuencial() {
         for (size_t i = 0; i < tamano; ++i) {
             if (array[i] == objetivo) {
                 return i;
             }
         }
-        return -1;
+        return -1; // Retorna -1 si no se encuentra el elemento
     }
 
-    // Realiza la búsqueda de forma paralela
+    // Método de búsqueda paralela usando OpenMP
     int buscarParalelo() {
         int indice_encontrado = -1;
         bool encontrado = false;
 
-        // Usamos #pragma omp parallel para crear un equipo de hilos
+        // Crea un equipo de hilos
         #pragma omp parallel
         {
-            // Usamos #pragma omp for para distribuir las iteraciones entre los hilos
-            // Justificación: Permite que múltiples hilos busquen simultáneamente en diferentes
-            // partes del array, potencialmente encontrando el objetivo más rápido
+            // Distribuye las iteraciones del bucle entre los hilos
+            // Justificación: Permite que múltiples hilos busquen en diferentes partes del array simultáneamente
             #pragma omp for
             for (size_t i = 0; i < tamano; ++i) {
-                // Si ya se encontró el objetivo, los demás hilos pueden terminar
+                // Si ya se encontró el elemento, los demás hilos pueden terminar
                 if (encontrado) continue;
                 if (array[i] == objetivo) {
-                    // Usamos #pragma omp critical para asegurar que solo un hilo
-                    // actualice las variables compartidas a la vez
-                    // Justificación: Evita condiciones de carrera al actualizar
-                    // las variables 'encontrado' e 'indice_encontrado'
+                    // Sección crítica para actualizar las variables compartidas
+                    // Justificación: Evita condiciones de carrera al actualizar 'encontrado' e 'indice_encontrado'
                     #pragma omp critical
                     {
                         if (!encontrado) {
@@ -73,30 +73,34 @@ public:
         return indice_encontrado;
     }
 
-    // Ejecuta y mide el tiempo de las versiones secuencial y paralela
+    // Método para ejecutar y comparar las versiones secuencial y paralela
     void ejecutar() {
+        // Ejecución y medición del tiempo para la versión secuencial
         auto inicio = std::chrono::high_resolution_clock::now();
         int resultadoSecuencial = buscarSecuencial();
         auto fin = std::chrono::high_resolution_clock::now();
         auto duracionSecuencial = std::chrono::duration_cast<std::chrono::microseconds>(fin - inicio).count();
 
+        // Ejecución y medición del tiempo para la versión paralela
         inicio = std::chrono::high_resolution_clock::now();
         int resultadoParalelo = buscarParalelo();
         fin = std::chrono::high_resolution_clock::now();
         auto duracionParalelo = std::chrono::duration_cast<std::chrono::microseconds>(fin - inicio).count();
 
+        // Impresión de resultados
         std::cout << "Tamaño del array: " << tamano << std::endl;
-        std::cout << "Objetivo: " << objetivo << std::endl;
-        std::cout << "Índice encontrado (secuencial): " << resultadoSecuencial << std::endl;
-        std::cout << "Índice encontrado (paralelo): " << resultadoParalelo << std::endl;
+        std::cout << "Índice encontrado (secuencial): "  
+                  << " ( Array["<< resultadoSecuencial <<"]: " << (resultadoSecuencial != -1 ? std::to_string(array[resultadoSecuencial]) : "no encontrado") << " )" << std::endl;
+        std::cout << "Índice encontrado (paralelo):   "  
+                  << " ( Array["<< resultadoParalelo <<"]: " << (resultadoParalelo != -1 ? std::to_string(array[resultadoParalelo]) : "no encontrado") << " )" << std::endl;
         std::cout << "Tiempo de ejecución (secuencial): " << duracionSecuencial << " microsegundos" << std::endl;
-        std::cout << "Tiempo de ejecución (paralelo): " << duracionParalelo << " microsegundos" << std::endl;
+        std::cout << "Tiempo de ejecución (paralelo):   " << duracionParalelo << " microsegundos" << std::endl;
         std::cout << "Aceleración: " << static_cast<double>(duracionSecuencial) / duracionParalelo << "x" << std::endl;
     }
 };
 
 int main() {
-    const size_t TAMANO_ARRAY = 100000000;
+    const size_t TAMANO_ARRAY = 100000000; // Tamaño del array para la búsqueda
     BuscadorParalelo buscador(TAMANO_ARRAY);
     buscador.ejecutar();
     return 0;
