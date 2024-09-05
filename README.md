@@ -17,8 +17,7 @@
    - [Simulación de Monte Carlo](#7-simulación-de-monte-carlo)
 8. [Consejos para el Uso Efectivo de OpenMP](#consejos-para-el-uso-efectivo-de-openmp)
 9. [Recursos Adicionales](#recursos-adicionales)
-10. [Conclusión](#conclusión)
-11. [Licencia](#licencia)
+
 
 ## Introducción a OpenMP
 
