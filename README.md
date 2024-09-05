@@ -145,14 +145,14 @@ __atomic_fetch_add(&x, 1, __ATOMIC_SEQ_CST);
 .
 ├── README.md
 ├── src/
-│   ├── suma_vectores.cpp
-│   ├── calculo_pi.cpp
-│   ├── multiplicacion_matrices.cpp
-│   ├── busqueda_paralela.cpp
-│   ├── ordenamiento_paralelo.cpp
-│   ├── procesamiento_imagenes.cpp
-│   └── simulacion_montecarlo.cpp
-└── LICENSE
+   ├── suma_vectores.cpp
+   ├── calculo_pi.cpp
+   ├── multiplicacion_matrices.cpp
+   ├── busqueda_paralela.cpp
+   ├── ordenamiento_paralelo.cpp
+   ├── procesamiento_imagenes.cpp
+   └── simulacion_montecarlo.cpp
+
 ```
 
 ## Requisitos
